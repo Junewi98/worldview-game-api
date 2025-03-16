@@ -1,0 +1,45 @@
+tags:
+  - Countries
+summary: List All Countries
+description: |
+  Retrieves a complete list of countries with their corresponding country codes.
+produces:
+  - application/json
+responses:
+  200:
+    description: Successfully retrieved the list of countries
+    schema:
+      type: object
+      properties:
+        countries_list:
+          type: array
+          description: Array of country objects containing code and name
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: The ISO country code
+                example: "US"
+              name:
+                type: string
+                description: The full name of the country
+                example: "United States"
+  404:
+    description: The source HTML file could not be found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "File not found"
+  500:
+    description: An error occurred while processing the request
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message detailing what went wrong
+          example: "Internal server error"

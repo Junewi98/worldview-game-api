@@ -1,0 +1,80 @@
+tags:
+  - Game
+summary: A Country Guessing Game
+description: |
+  When you make the GET request with parameters blank, you will get:
+  1. Unique country code
+  2. Image of the country in ASCII format
+
+  Seeing the image, guess what country it is by:
+  1. Populating answer_country_code parameter with the country code you are presented with in the question
+  2. Populating the answer_country_name parameter with the name of that country
+produces:
+  - application/json
+parameters:
+  - name: answer_country_code
+    in: query
+    type: integer
+    required: false
+    description: The country code you are presented in the question, this will determine for what country you are answering
+  - name: answer_country_name
+    in: query
+    type: string
+    required: false
+    description: The country name being guessed
+responses:
+  200:
+    description: Country code and image for the question retrieved
+    schema:
+      type: object
+      properties:
+        country_code:
+          type: integer
+          description: Country Code identifying the question
+          example: 88
+        country_shape:
+          type: array
+          description: ASCII art representation of the country shape
+          items:
+            type: array
+            items:
+              type: string
+  202: 
+    description: Guess received and processed
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the guess was correct (when submitting guess)
+          example: True
+        message:
+          type: string
+          description: Success or failure message for the guess
+          example: "You have answered correctly!"
+        country_code:
+          type: integer
+          description: Country Code identifying the question
+          example: 88
+        correct_country_name:
+          type: string
+          description: Revealed when guess is incorrect
+          example: "Kuwait"
+  404:
+    description: Resource not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "File not found"
+  500:
+    description: Server error
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Internal server error"
