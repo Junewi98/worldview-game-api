@@ -1,8 +1,9 @@
-# worldview-game-api
-A country guessing game, played via API
+# worldview-api game
+an api based country guessing game played on swagger
 
-Navigate to ```/apidocs``` to play using swagger
+You can also use GET ```/game/guess-country``` endpoint to play via direct call
 
-You can also use ```/game/guess-country``` endpoint to play via get requests
+Use GET ```/game/guess-country?answer_country_code={country_code}&answer_country_name={country_name}``` to answer
 
-Use ```/game/guess-country?answer_country_code={country_code}&answer_country_name={country_name}``` to answer
+
+Special thanks to **djaiss** for the images of the coutries: https://github.com/djaiss/mapsicon
