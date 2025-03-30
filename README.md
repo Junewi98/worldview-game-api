@@ -1,7 +1,7 @@
 # worldview-api game
 an api based country guessing game played on swagger
 
-https://worldviewapi.cloud/apidocs/
+https://worldviewapi.cloud/
 
 You can also use GET ```/game/guess-country``` endpoint to play via direct call
 
