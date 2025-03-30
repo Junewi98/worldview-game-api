@@ -1,21 +1,64 @@
 import re
 import os
 import random
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for, send_from_directory
 from flasgger import Swagger, swag_from
 import PIL.Image
 
-app = Flask(__name__)
+server_url = os.environ.get(
+    'SERVER_URL',
+    'http://localhost:5000'
+)
+
+app = Flask(__name__, 
+           static_url_path='/static',
+           static_folder='static') 
+
 swagger_template = {
     "swagger": "2.0",
     "info": {
-        "title": "World-view Game API",
-        "description": "A country guessing game, played via API",
-        "version": "1.0.0"
+        "title": "worldview-api",
+        "description": "an api-based country guessing game played on swagger",
+        "version": "1.1.0",
+        "uiversion": 3
     },
-    "schemes": ["http"],
+    "servers": [
+        {
+            "url": server_url,
+            "description": "Cloud Run Server"
+        }
+    ],
+    "schemes": ["https", "http"]
 }
-swagger = Swagger(app, template=swagger_template)
+
+swagger_config = {
+    "headers": [],
+    "specs": [
+        {
+            "endpoint": "apispec_1",
+            "route": "/apispec_1.json",
+            "rule_filter": lambda rule: True,
+            "model_filter": lambda tag: True,
+        }
+    ],
+    "static_url_path": "/static", 
+    "swagger_ui_config": {
+        "docExpansion": "none",
+        "deepLinking": True,
+        "displayOperationId": True,
+        "logo": {
+            "url": "/static/images/logo.png",
+            "backgroundColor": "#000000",
+            "altText": "worldview-api logo"
+        }
+    },
+    "swagger_ui_css": "/static/css/swagger-ui.css",
+    "swagger_ui_bundle_js": "//unpkg.com/swagger-ui-dist/swagger-ui-bundle.js",
+    "swagger_ui_standalone_preset_js": "//unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js",
+    "favicon": "/static/images/favicon.ico",
+}
+
+swagger = Swagger(app, template=swagger_template, config=swagger_config)
 
 # HELPER FUNCTIONS
 def get_country_list_from_document(document):
@@ -60,6 +103,14 @@ def convert_image_to_ascii(image_path):
     return ascii_image
 
 # ENDPOINT CONTROLLERS
+
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
+@app.route("/")
+def home():
+    return redirect("/apidocs")
 
 @app.route("/list-all-countries")
 @swag_from("docs/list_all_countries.yml")
